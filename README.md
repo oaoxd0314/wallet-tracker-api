@@ -33,3 +33,8 @@ hreoku login
 ```
 git push heroku
 ```
+
+開啟 heroku App
+```
+heroku open
+```
