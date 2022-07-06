@@ -12,7 +12,7 @@ import (
 )
 
 func fetchEtherScan(endpoint string) (respData models.EtherScanResp) {
-	const apikey = "MB9YPTC237F6F7KRD2XMYQNGFIPCJVG557"
+	apikey := os.Getenv("API_KEY")
 	path := fmt.Sprintf("https://api.etherscan.io/%v&apikey=%v", endpoint, apikey)
 
 	response, err := http.Get(path)
