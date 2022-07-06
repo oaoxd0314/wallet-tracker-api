@@ -10,11 +10,18 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// @Summary Get Wallet Found
+// @Tags EtherScan
+// @produce application/json
+// @param wallet string true "wallet"
+// @Success 200 string string 成功後返回的值
+// @Router  /etherscan/getwalletfound [post]
 func GetWalletFound(c *gin.Context) {
 	fmt.Println(os.Getenv("PORT"))
 	var requestBody models.Wallet
 
 	if err := c.BindJSON(&requestBody); err != nil {
+		log.Fatal(err)
 		return
 	}
 
@@ -24,10 +31,17 @@ func GetWalletFound(c *gin.Context) {
 	c.IndentedJSON(http.StatusCreated, respData)
 }
 
+// @Summary Get Trade Record
+// @Tags EtherScan
+// @produce application/json
+// @param wallet string true "wallet"
+// @Success 200 string string 成功後返回的值
+// @Router /etherscan/gettraderecord [post]
 func GetTradeRecord(c *gin.Context) {
 	var requestBody models.Wallet
 
 	if err := c.BindJSON(&requestBody); err != nil {
+		log.Fatal(err)
 		return
 	}
 	endpoint := fmt.Sprintf("api?module=account&action=txlist&address=%v&startblock=0&endblock=99999999&page=1&offset=10&sort=asc", requestBody.Wallet)

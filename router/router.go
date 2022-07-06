@@ -1,36 +1,32 @@
-package routes
+package router
 
-// controller "api/controller"
-// "github.com/gorilla/mux"
+import (
+	"fmt"
+	"os"
+	"wallet-tracker-api/services"
 
-// type Route struct {
-// 	Method     string
-// 	Pattern    string
-// 	Handler    http.HandlerFunc
-// 	Middleware mux.MiddlewareFunc
-// }
+	"github.com/gin-gonic/gin"
 
-// var routes []Route
+	_ "wallet-tracker-api/docs"
 
-// func init() {
-// 	register("POST", "/api/todo", controller.AddTodo, nil)
-// 	register("GET", "/api/todo/{id}", controller.GetTodoById, nil)
+	swaggerFiles "github.com/swaggo/files"
+	ginSwagger "github.com/swaggo/gin-swagger"
+)
 
-// }
+func SetupRouter() *gin.Engine {
+	router := gin.Default()
+	PORT := os.Getenv("PORT")                                                        //get env var
+	url := ginSwagger.URL(fmt.Sprintf("http://localhost:%v/swagger/doc.json", PORT)) //set swagger default url
 
-// func NewRouter() *mux.Router {
-// 	r := mux.NewRouter()
-// 	for _, route := range routes {
-// 		r.Methods(route.Method).
-// 			Path(route.Pattern).
-// 			Handler(route.Handler)
-// 		if route.Middleware != nil {
-// 			r.Use(route.Middleware)
-// 		}
-// 	}
-// 	return r
-// }
+	router.LoadHTMLGlob("template/*") // load template
 
-// func register(method, pattern string, handler http.HandlerFunc, middleware mux.MiddlewareFunc) {
-// 	routes = append(routes, Route{method, pattern, handler, middleware})
-// }
+	router.GET("/", services.HomePage) // set homepage
+
+	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler, url)) // set swagger path
+
+	router.Group("etherscan"). // set 3rd part api(etherscan) as a group
+					POST("/getwalletfound", services.GetWalletFound).
+					POST("/gettraderecord", services.GetTradeRecord)
+
+	return router
+}

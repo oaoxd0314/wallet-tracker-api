@@ -7,9 +7,9 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func Test(c *gin.Context) {
+func HomePage(c *gin.Context) {
 	data := new(models.IndexData)
-	data.Title = "首頁"
-	data.Content = "我的第一個首頁"
+	data.Title = "Wallet Tracker API"
+	data.Content = ""
 	c.HTML(http.StatusOK, "index.html", data)
 }
