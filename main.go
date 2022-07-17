@@ -2,6 +2,7 @@ package main
 
 import (
 	"os"
+	"wallet-tracker-api/database"
 	"wallet-tracker-api/router"
 
 	"github.com/joho/godotenv"
@@ -20,7 +21,8 @@ import (
 // @host localhost:8080
 // schemes http
 func main() {
-	godotenv.Load()                     // load .env
+	godotenv.Load() // load .env
+	database.ConnectDB()
 	router := router.SetupRouter()      // load /router/*
 	router.Run(":" + os.Getenv("PORT")) // run server in :PORT( env var PORT )
 }
